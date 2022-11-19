@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepo;
 import com.example.demo.service.EmployeeService;
@@ -57,10 +58,11 @@ public class EmployeeController {
 //		return employeeService.getAllEmployees();
 //	}
 //	
-//	@GetMapping("{id}")
-//	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") long id){
-//		return new ResponseEntity<Employee>(employeeService.getEmployeeById(id),HttpStatus.OK);
-//	}
+	@GetMapping("/employees/{id}")
+	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") long id){
+		Employee e=employeeRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Employee", "ID", id));
+		return ResponseEntity.ok(e);
+	}
 //	
 //	@PutMapping("{id}")
 //	public ResponseEntity<Employee> updateEmployee(@PathVariable("id") long id,@RequestBody Employee e){
